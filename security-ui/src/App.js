@@ -39,7 +39,7 @@ const App = () => {
   return (
     <div className="container">
       <Messages/>
-      <InputBar/>
+      <InputBar setMessage={setMessage}/>
     </div>
   )
 
