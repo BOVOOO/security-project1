@@ -7,6 +7,7 @@ import './App.css'
 
 const App = () => {
   const [message, setMessage] = useState('')
+  const[messages, setMessages] = useState([])
   const [reply, setReply] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
@@ -16,6 +17,10 @@ const App = () => {
 
   const handleSendClick = () => {
     if (message.trim() !== '') {
+      setMessages((prevState) => [
+        ...prevState, 
+        {message: message, isSent: true}
+      ])
       setIsLoading(true) 
       const cipherText = CryptoJS.AES.encrypt(message, process.env.REACT_APP_KEY).toString();
       console.log(cipherText)
@@ -24,7 +29,10 @@ const App = () => {
         .then((response) => {
           console.log(response)
           const decipherText = CryptoJS.AES.decrypt(response.data.cipherReply, process.env.REACT_APP_KEY).toString(CryptoJS.enc.Utf8)
-          setReply(decipherText)
+          setMessages((prevState) => [
+            ...prevState, 
+            {message: decipherText, isSent: false}
+          ])
         })
         .catch((error) => {
           console.log(error)
@@ -38,8 +46,8 @@ const App = () => {
 
   return (
     <div className="container">
-      <Messages/>
-      <InputBar setMessage={setMessage}/>
+      <Messages messages={messages}/>
+      <InputBar setMessage={setMessage} message={message} handleSendClick={handleSendClick}/>
     </div>
   )
 
