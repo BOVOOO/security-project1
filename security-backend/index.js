@@ -10,8 +10,8 @@ app.use(cors())
 
 app.post('/chat', async (req, res) => {
   const apiNumber = Math.floor(Math.random() * 10) + 1;
-  const API_KEY = `process.env.API_KEY_${apiNumber}`
-  console.log(API_KEY)
+  const apiKey = process.env[`API_KEY_${apiNumber}`]
+  console.log(apiKey)
   try {
     console.log('Ciphered message:', req.body.cipherText)
     const message = CryptoJS.AES.decrypt(req.body.cipherText, process.env.KEY).toString(CryptoJS.enc.Utf8)
@@ -27,7 +27,7 @@ app.post('/chat', async (req, res) => {
       },
       {
         headers: {
-          Authorization: `Bearer ${process.env.API_KEY_1}`,
+          Authorization: `Bearer ${apiKey}`,
           'Content-Type': 'application/json',
         },
       }
