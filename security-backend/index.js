@@ -9,7 +9,11 @@ app.use(express.json())
 app.use(cors())
 
 app.post('/chat', async (req, res) => {
+  const apiNumber = Math.floor(Math.random() * 10) + 1;
+  const API_KEY = `process.env.API_KEY_${apiNumber}`
+  console.log(API_KEY)
   try {
+    console.log('Ciphered message:', req.body.cipherText)
     const message = CryptoJS.AES.decrypt(req.body.cipherText, process.env.KEY).toString(CryptoJS.enc.Utf8)
     console.log('Deciphered message:', message)
     const response = await axios.post(
@@ -23,7 +27,7 @@ app.post('/chat', async (req, res) => {
       },
       {
         headers: {
-          Authorization: `Bearer ${process.env.API_KEY}`,
+          Authorization: `Bearer ${process.env.API_KEY_1}`,
           'Content-Type': 'application/json',
         },
       }
@@ -31,6 +35,7 @@ app.post('/chat', async (req, res) => {
 
     // Extract the model-generated reply
     const reply = response.data.choices[0].message.content
+    console.log('Reply:', reply)
     const cipherReply = CryptoJS.AES.encrypt(reply, process.env.KEY).toString();
     console.log('Ciphered reply:', cipherReply)
     res.json({ cipherReply })
