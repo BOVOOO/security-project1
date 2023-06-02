@@ -11,7 +11,7 @@ app.use(cors())
 app.post('/chat', async (req, res) => {
   const apiNumber = Math.floor(Math.random() * 10) + 1;
   const apiKey = process.env[`API_KEY_${apiNumber}`]
-  console.log(apiKey)
+  console.log("Swapping...\nKey number:", apiNumber)
   try {
     console.log('Ciphered message:', req.body.cipherText)
     const message = CryptoJS.AES.decrypt(req.body.cipherText, process.env.KEY).toString(CryptoJS.enc.Utf8)
